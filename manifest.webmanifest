@@ -1,0 +1,24 @@
+{
+  "name": "Jin and Shein's Recipe Vault",
+  "short_name": "Jin & Shein",
+  "description": "A personal recipe vault for Jin and Shein, with simple search and organization.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fef8ef",
+  "theme_color": "#1f8a5b",
+  "icons": [
+    {
+      "src": "./icons/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jin and Shein's Recipe Vault</title>
+    <meta name="theme-color" content="#1f8a5b" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Jin and Shein's Recipe Vault" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" type="image/svg+xml" href="./icons/icon-192.svg" />
+    <link rel="apple-touch-icon" href="./icons/icon-192.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700&family=Manrope:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="hero">
+        <p class="eyebrow">Jin + Shein</p>
+        <h1>Personal Recipe Vault</h1>
+        <p class="subtitle">
+          One home for everyday staples and special dinners, organized your
+          way.
+        </p>
+      </header>
+
+      <section class="layout">
+        <section class="card form-card">
+          <h2 id="formTitle">Add Recipe</h2>
+          <form id="recipeForm">
+            <input type="hidden" id="recipeId" />
+            <label>
+              Recipe Name
+              <input id="name" name="name" required maxlength="80" />
+            </label>
+            <label>
+              Category
+              <input
+                id="category"
+                name="category"
+                placeholder="Breakfast, Dinner, Dessert..."
+                maxlength="40"
+              />
+            </label>
+            <label>
+              Tags (comma-separated)
+              <input
+                id="tags"
+                name="tags"
+                placeholder="quick, vegetarian, meal prep"
+                maxlength="120"
+              />
+            </label>
+            <label>
+              Ingredients (one per line)
+              <textarea id="ingredients" name="ingredients" rows="6" required></textarea>
+            </label>
+            <label>
+              Instructions
+              <textarea id="instructions" name="instructions" rows="6" required></textarea>
+            </label>
+            <label>
+              Notes
+              <textarea id="notes" name="notes" rows="3"></textarea>
+            </label>
+            <label>
+              Recipe Photo
+              <input id="photo" name="photo" type="file" accept="image/*" />
+            </label>
+            <img id="photoPreview" class="photo-preview hidden" alt="Recipe photo preview" />
+            <button type="button" id="clearPhotoBtn" class="muted hidden">
+              Remove Photo
+            </button>
+
+            <div class="form-actions">
+              <button type="submit" id="submitBtn">Save Recipe</button>
+              <button type="button" id="cancelEditBtn" class="muted hidden">
+                Cancel Edit
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <section class="card list-card">
+          <div class="controls">
+            <input id="searchInput" placeholder="Search recipes..." />
+
+            <select id="categoryFilter">
+              <option value="">All Categories</option>
+            </select>
+
+            <select id="sortSelect">
+              <option value="newest">Newest First</option>
+              <option value="az">A to Z</option>
+              <option value="favorites">Favorites First</option>
+            </select>
+
+            <label class="favorites-filter">
+              <input type="checkbox" id="favoritesOnly" />
+              Favorites only
+            </label>
+          </div>
+
+          <div class="stats" id="stats"></div>
+          <div id="recipesContainer" class="recipes"></div>
+        </section>
+      </section>
+    </main>
+    <aside id="updateToast" class="update-toast hidden" role="status" aria-live="polite">
+      <p>A new version is ready.</p>
+      <div class="update-actions">
+        <button id="refreshAppBtn">Refresh</button>
+        <button id="dismissUpdateBtn" class="muted">Later</button>
+      </div>
+    </aside>
+
+    <template id="recipeCardTemplate">
+      <article class="recipe-card">
+        <img class="recipe-photo hidden" alt="Recipe photo" />
+        <div class="recipe-head">
+          <h3 class="recipe-name"></h3>
+          <button class="favorite-btn" title="Toggle favorite"></button>
+        </div>
+        <p class="recipe-meta"></p>
+        <div class="tag-list"></div>
+        <section>
+          <h4>Ingredients</h4>
+          <ul class="ingredients-list"></ul>
+        </section>
+        <section>
+          <h4>Instructions</h4>
+          <p class="instructions"></p>
+        </section>
+        <p class="notes hidden"></p>
+        <div class="card-actions">
+          <button class="edit-btn muted">Edit</button>
+          <button class="delete-btn danger">Delete</button>
+        </div>
+      </article>
+    </template>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
