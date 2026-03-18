@@ -1,4 +1,5 @@
 const STORAGE_KEY = "recipe-vault-v1";
+const CATEGORY_OPTIONS = ["Auggie", "Dessert", "Breakfast", "Lunch/Dinner"];
 
 const state = {
   recipes: loadRecipes(),
@@ -29,6 +30,15 @@ const clearPhotoBtn = document.querySelector("#clearPhotoBtn");
 const updateToast = document.querySelector("#updateToast");
 const refreshAppBtn = document.querySelector("#refreshAppBtn");
 const dismissUpdateBtn = document.querySelector("#dismissUpdateBtn");
+const recipeOverlay = document.querySelector("#recipeOverlay");
+const overlayCloseBtn = document.querySelector("#overlayCloseBtn");
+const overlayPhoto = document.querySelector("#overlayPhoto");
+const overlayTitle = document.querySelector("#overlayTitle");
+const overlayMeta = document.querySelector("#overlayMeta");
+const overlayTags = document.querySelector("#overlayTags");
+const overlayIngredients = document.querySelector("#overlayIngredients");
+const overlayInstructions = document.querySelector("#overlayInstructions");
+const overlayNotes = document.querySelector("#overlayNotes");
 
 let waitingServiceWorker = null;
 let isRefreshing = false;
@@ -62,6 +72,15 @@ clearPhotoBtn.addEventListener("click", clearPhotoDraft);
 
 refreshAppBtn?.addEventListener("click", activateUpdate);
 dismissUpdateBtn?.addEventListener("click", hideUpdateToast);
+overlayCloseBtn?.addEventListener("click", closeRecipeOverlay);
+recipeOverlay?.addEventListener("click", (event) => {
+  if (event.target === recipeOverlay) closeRecipeOverlay();
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !recipeOverlay?.classList.contains("hidden")) {
+    closeRecipeOverlay();
+  }
+});
 
 registerServiceWorker();
 render();
@@ -152,17 +171,8 @@ function render() {
 }
 
 function renderCategoryFilter() {
-  const categories = Array.from(
-    new Set(
-      state.recipes
-        .map((recipe) => recipe.category)
-        .filter(Boolean)
-        .sort((a, b) => a.localeCompare(b))
-    )
-  );
-
   categoryFilter.innerHTML = '<option value="">All Categories</option>';
-  categories.forEach((category) => {
+  CATEGORY_OPTIONS.forEach((category) => {
     const option = document.createElement("option");
     option.value = category;
     option.textContent = category;
@@ -231,6 +241,10 @@ function renderRecipes() {
     favoriteBtn.addEventListener("click", () => toggleFavorite(recipe.id));
     editBtn.addEventListener("click", () => startEdit(recipe));
     deleteBtn.addEventListener("click", () => deleteRecipe(recipe.id));
+    card.addEventListener("click", (event) => {
+      if (event.target.closest("button")) return;
+      openRecipeOverlay(recipe);
+    });
 
     card.dataset.id = recipe.id;
     recipesContainer.append(fragment);
@@ -430,4 +444,51 @@ function readFileAsDataUrl(file) {
     reader.onerror = () => reject(new Error("File read failed"));
     reader.readAsDataURL(file);
   });
+}
+
+function openRecipeOverlay(recipe) {
+  overlayTitle.textContent = recipe.name;
+  overlayMeta.textContent = recipe.category || "Uncategorized";
+  overlayInstructions.textContent = recipe.instructions;
+
+  overlayTags.innerHTML = "";
+  recipe.tags.forEach((tag) => {
+    const chip = document.createElement("span");
+    chip.className = "tag";
+    chip.textContent = `#${tag}`;
+    overlayTags.append(chip);
+  });
+
+  overlayIngredients.innerHTML = "";
+  recipe.ingredients.forEach((ingredient) => {
+    const li = document.createElement("li");
+    li.textContent = ingredient;
+    overlayIngredients.append(li);
+  });
+
+  if (recipe.photo) {
+    overlayPhoto.classList.remove("hidden");
+    overlayPhoto.src = recipe.photo;
+  } else {
+    overlayPhoto.classList.add("hidden");
+    overlayPhoto.removeAttribute("src");
+  }
+
+  if (recipe.notes) {
+    overlayNotes.classList.remove("hidden");
+    overlayNotes.textContent = `Note: ${recipe.notes}`;
+  } else {
+    overlayNotes.classList.add("hidden");
+    overlayNotes.textContent = "";
+  }
+
+  recipeOverlay.classList.remove("hidden");
+  recipeOverlay.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+}
+
+function closeRecipeOverlay() {
+  recipeOverlay.classList.add("hidden");
+  recipeOverlay.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
 }

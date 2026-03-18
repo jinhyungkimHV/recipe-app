@@ -41,12 +41,13 @@
             </label>
             <label>
               Category
-              <input
-                id="category"
-                name="category"
-                placeholder="Breakfast, Dinner, Dessert..."
-                maxlength="40"
-              />
+              <select id="category" name="category">
+                <option value="">Select category</option>
+                <option value="Auggie">Auggie</option>
+                <option value="Dessert">Dessert</option>
+                <option value="Breakfast">Breakfast</option>
+                <option value="Lunch/Dinner">Lunch/Dinner</option>
+              </select>
             </label>
             <label>
               Tags (comma-separated)
@@ -118,6 +119,26 @@
         <button id="refreshAppBtn">Refresh</button>
         <button id="dismissUpdateBtn" class="muted">Later</button>
       </div>
+    </aside>
+    <aside id="recipeOverlay" class="recipe-overlay hidden" aria-hidden="true">
+      <section class="recipe-overlay-panel" role="dialog" aria-modal="true" aria-labelledby="overlayTitle">
+        <button id="overlayCloseBtn" class="overlay-close-btn muted" type="button">
+          Close
+        </button>
+        <img id="overlayPhoto" class="overlay-photo hidden" alt="Recipe photo" />
+        <h2 id="overlayTitle"></h2>
+        <p id="overlayMeta" class="overlay-meta"></p>
+        <div id="overlayTags" class="tag-list"></div>
+        <section>
+          <h4>Ingredients</h4>
+          <ul id="overlayIngredients" class="ingredients-list"></ul>
+        </section>
+        <section>
+          <h4>Instructions</h4>
+          <p id="overlayInstructions" class="instructions"></p>
+        </section>
+        <p id="overlayNotes" class="notes hidden"></p>
+      </section>
     </aside>
 
     <template id="recipeCardTemplate">

@@ -245,6 +245,13 @@ button {
   border-radius: 12px;
   padding: 12px;
   background: #fff;
+  cursor: pointer;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.recipe-card:hover {
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow-soft);
 }
 
 .recipe-photo {
@@ -340,6 +347,47 @@ h4 {
   display: none !important;
 }
 
+.recipe-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  background: rgba(25, 34, 29, 0.58);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 14px;
+}
+
+.recipe-overlay-panel {
+  width: min(820px, 100%);
+  max-height: 92vh;
+  overflow: auto;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.overlay-close-btn {
+  margin-left: auto;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.overlay-photo {
+  width: 100%;
+  max-height: 360px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  margin-bottom: 10px;
+}
+
+.overlay-meta {
+  margin: 4px 0 8px;
+  color: var(--muted);
+}
+
 .update-toast {
   position: fixed;
   right: 16px;
@@ -388,5 +436,10 @@ h4 {
     right: 12px;
     bottom: 12px;
     max-width: none;
+  }
+
+  .recipe-overlay-panel {
+    max-height: 94vh;
+    padding: 12px;
   }
 }
