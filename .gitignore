@@ -1,0 +1,23 @@
+# dependencies
+/node_modules
+
+# Next.js
+/.next
+/out
+
+# local environment variables
+.env
+.env.local
+.env.*.local
+
+# deployment and test output
+.vercel
+coverage
+
+# operating systems and editors
+.DS_Store
+*.log
+*.tsbuildinfo
+
+# local agent settings
+.claude/

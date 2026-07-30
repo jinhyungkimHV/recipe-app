@@ -1,32 +1,76 @@
 # Jin and Shein's Recipe Vault
 
-A lightweight personal recipe vault app for Jin and Shein, built with plain HTML, CSS, and JavaScript.
+A private, installable recipe vault built with Next.js, TypeScript, and
+Supabase. Recipes are shared between authenticated users and include categories,
+tags, favorites, photos, search, filtering, and sorting.
 
-## Features
+## Stack
 
-- Add new recipes quickly
-- Organize recipes with categories and tags
-- Search across title, notes, ingredients, and tags
-- Mark favorites and filter by favorites
-- Sort recipes by newest, alphabetical, or favorite-first
-- Edit and delete recipes
-- Add recipe photos with preview and edit support
-- Local persistence with `localStorage` (no backend required)
-- Installable PWA with offline cache for core app files
+- Next.js App Router
+- Supabase Auth, Postgres, and Storage
+- Plain CSS ported from the original browser-only app
+- Installable PWA with runtime caching for app assets
 
-## Run
+## Local setup
 
-Use a local HTTP server (required for service worker and PWA install):
+1. Install Node.js 22 or newer.
+2. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Copy the environment template:
+
+   ```bash
+   cp .env.example .env.local
+   ```
+
+4. In Supabase, open the project Connect dialog and put its URL and publishable
+   key in `.env.local`. Legacy projects may use
+   `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+5. Add the service-role key only for the one-time migration route. Never expose
+   it in a `NEXT_PUBLIC_` variable or commit `.env.local`.
+6. Start the app:
+
+   ```bash
+   npm run dev
+   ```
+
+7. Open `http://localhost:3000`.
+
+## Expected Supabase resources
+
+The app expects:
+
+- A `public.recipes` table matching the schema in [EPIC.md](./EPIC.md)
+- Row-level-security policies allowing authenticated recipe CRUD
+- A public Storage bucket named `recipe-photos`
+- Authenticated upload and delete policies on that bucket
+- At least one email/password user
+
+The application uses current Supabase publishable keys and also supports the
+legacy anon-key environment variable documented in the original epic.
+
+## Old recipe migration
+
+Set `MIGRATION_ENABLED=true` and provide `SUPABASE_SERVICE_ROLE_KEY`, then sign
+in and visit `/migrate`. The page accepts the old `recipe-vault-v1`
+`localStorage` JSON and uploads embedded photos to Supabase Storage.
+
+After verifying the imported recipes:
+
+1. Set `MIGRATION_ENABLED=false`.
+2. Remove `SUPABASE_SERVICE_ROLE_KEY` from the deployed application if it is no
+   longer needed.
+3. Redeploy.
+
+## Verification
 
 ```bash
-python3 -m http.server 8000
+npm run lint
+npm run build
 ```
 
-Then go to `http://localhost:8000`.
-
-## Install As App (PWA)
-
-1. Open `http://localhost:8000` in Chrome, Edge, or Safari.
-2. Use your browser's install action (for example, "Install app" in the address bar).
-3. The app will open in standalone mode and cache core assets for offline use.
-4. When a new version is available, an in-app update banner appears with a refresh button.
+Production also requires the environment variables to be configured in the
+deployment platform.
